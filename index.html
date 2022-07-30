@@ -84,6 +84,7 @@
 
         .header-item {
             width: 25%;
+            min-width: 210px;
             text-align: center;
             margin: 10px;
         }
@@ -117,38 +118,38 @@
 <body>
     <div class="flex-column container-rana-main">
         <div class="flex-row-wrap flex-center container-header">
-            <div class="header-item header-item1">Wallet : <span>$34</span></div>
-            <div class="header-item header-item2">Reload $30</div>
-            <div class="header-item header-item3">Real Money</div>
+            <div class="header-item header-item1">Wallet : $<span id="wallet">30</span></div>
+            <div class="header-item header-item2" onclick="reloadWallet()">Reload $30</div>
+            <div class="header-item header-item3"> <a style="text-decoration: none;color: blue;"
+                    href="https://www.junk.com">Real Money</a></div>
         </div>
         <div class="flex-row-wrap container-content flex-center">
             <div class="opportunity-item-rana flex-around flex-column">
                 <div> Opportunity A</div>
                 <div style="background-color:white;width:100%" class="flex-row flex-around">
-                    <i style="font-size: 85px" class="fa fa-money" aria-hidden="true"></i> <span>0:30s</span>
+                    <i style="font-size: 85px" class="fa fa-money" aria-hidden="true"></i> <span id="opportunity1">0:30s</span>
                 </div>
             </div>
             <div class="opportunity-item-rana flex-around flex-column">
                 <div> Opportunity B</div>
                 <div style="background-color:white;width:100%" class="flex-row flex-around">
-                    <i style="font-size: 85px" class="fa fa-money" aria-hidden="true"></i> <span>0:15s</span>
+                    <i style="font-size: 85px" class="fa fa-money" aria-hidden="true"></i> <span id="opportunity2">0:15s</span>
                 </div>
             </div>
             <div class="opportunity-item-rana flex-column flex-around">
                 <div> Opportunity C</div>
                 <div style="background-color:white;width:100%" class="flex-row flex-around">
-                    <i style="font-size: 85px" class="fa fa-money" aria-hidden="true"></i> <span>1:00s</span>
+                    <i style="font-size: 85px" class="fa fa-money" aria-hidden="true"></i> <span id="opportunity3">1:00s</span>
                 </div>
             </div>
             <div id="item-highrisk" class="opportunity-item-rana item-highrisk flex-around flex-column">
                 <div> Cost 2$</div>
-                <div> Payout: 2$</div>
+                <div> Payout: 20$</div>
                 <div> High risk <button class="buy-btn-rana" onclick="buyClick()">BUY</button></div>
 
             </div>
-            <div class="opportunity-item-rana flex-around flex-column">
-                <div> Cannot buy</div>
-                <div> Reload wallet</div>
+            <div id="no-money" class="opportunity-item-rana flex-around flex-column">
+                
             </div>
             <div class="opportunity-item-rana flex-column flex-around">
                 <!-- EMPTY -->
@@ -157,9 +158,8 @@
                 <div>Working</div>
                 <div> <i id="loader-spin" style="font-size:65px" class="fas fa-sync "></i></div>
             </div>
-            <div class="opportunity-item-rana flex-around flex-column">
-                <div>No payout</div>
-                <div> Try again</div>
+            <div id="no-payout-rana" class="opportunity-item-rana flex-around flex-column">
+              
             </div>
             <div id="payout-rana" class="opportunity-item-rana flex-column flex-around">
 
@@ -168,39 +168,86 @@
         </div>
     </div>
     <script>
+        var totalWallet = 30;
+        walletUpdate();
+        function walletUpdate(){
+            document.getElementById("wallet").innerText = totalWallet;
+        }
+
+       function reloadWallet(){
+        totalWallet = 30;
+        walletUpdate();
+        document.getElementById("no-money").innerHTML ="";
+        document.getElementById("payout-rana").innerHTML ="";
+        document.getElementById("no-payout-rana").innerHTML ="";
+       }
+
         scaleHighrisk();
         function scaleHighrisk() {
             setTimeout(() => {
-                document.getElementById("item-highrisk").style.transform = "scale(1)"
-
+                document.getElementById("item-highrisk").style.transform = "scale(1)";
             }, 100)
         }
         function buyClick() {
-            document.getElementById("loader-spin").classList.add("fa-spin")
+            if(totalWallet>2){
+            document.getElementById("loader-spin").classList.add("fa-spin");
+            var num = Math.floor(Math.random()*2)
+            var id;
+            if(num === 1){
+                id = "payout-rana";
+            }else if(num === 0){
+                id = "no-payout-rana";
+            }
             setTimeout(() => {
                 document.getElementById("loader-spin").classList.remove("fa-spin");
-                document.getElementById("payout-rana").innerHTML = "<div>$20 Payout</div><div><i class='fas fa-award' style='font-size:85px;color:gold'></i></div>"
-                blink()
+                if(num === 1){
+                    document.getElementById("payout-rana").innerHTML = "<div>$20 Payout</div><div><i class='fas fa-award' style='font-size:85px;color:gold'></i></div>";
+                    document.getElementById("no-payout-rana").innerHTML ="";
+                    totalWallet += 20;
+                    walletUpdate()
+                }else if(num === 0){
+                    document.getElementById("no-payout-rana").innerHTML = "<div>No payout</div><div> Try again</div>";
+                    document.getElementById("payout-rana").innerHTML ="";
+                   totalWallet-=2;
+                    walletUpdate()
+                }
+               
+                blink(id)
             }, 1500)
+        }else{
+            document.getElementById("no-money").innerHTML ="<div> Cannot buy</div><div> Reload wallet</div>";
+            blink("no-money")
         }
+    }
 
-        function blink() {
+        function blink(id) {
             var i = 0;
             const blinkInt = setInterval(() => {
-                document.getElementById("payout-rana").style.opacity = 0;
+                document.getElementById(id).style.opacity = 0;
                 setTimeout(() => {
-                    document.getElementById("payout-rana").style.opacity = 1;
+                    document.getElementById(id).style.opacity = 1;
                 }, 200)
 
-                console.log(i)
                 if (i > 4) {
                     clearInterval(blinkInt)
                 }
                 i++;
-
-
-
             }, 500)
+
+        }
+
+       countdownFunc(30, "opportunity1")
+       countdownFunc(15, "opportunity2")
+       countdownFunc(60, "opportunity3")
+        function countdownFunc(totalTime, objId) {
+            var timeleft = totalTime;
+            var downloadTimer = setInterval(function () {
+                if (timeleft <= 0) {
+                    clearInterval(downloadTimer);
+                }
+                document.getElementById(objId).innerHTML = `0.${timeleft}`;
+                timeleft -= 1;
+            }, 100);
 
         }
 
