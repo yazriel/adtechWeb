@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/c681f845d0.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-size: 35px;
+            transition: all .1s;
+        }
+
+        .flex-around {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+
+        .flex-row-wrap {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .opportunity-item-rana {
+            position: relative;
+            padding: 20px;
+            font-size: 22px;
+            height: 11vw;
+            min-height: 210px;
+            width: 15vw;
+            min-width: 210px;
+            margin: 10px;
+            border: .5px solid gray;
+            border-radius: 7px;
+            box-shadow: 4px 4px 3px -2px gray,
+                -3px -3px 3px -1px gray;
+        }
+
+        .item-highrisk {
+            transform: scale(.2);
+            transition: all .5s;
+        }
+
+        .container-rana-main {
+            width: 50vw;
+            margin: auto;
+            margin-top: 20px !important;
+            min-width: 320px;
+        }
+
+        /* HEADER BOX */
+        .container-header {
+            padding: 2vw;
+            border: 1px solid gray;
+            width: 95%;
+            margin: auto;
+            box-shadow: 4px 4px 3px -2px gray,
+                -3px -3px 3px -1px gray;
+        }
+
+        .header-item {
+            width: 25%;
+            text-align: center;
+            margin: 10px;
+        }
+
+        .header-item2,
+        .header-item3 {
+            color: blue;
+            border: 1px solid gray;
+            padding: 1vw;
+            box-shadow: 4px 4px 3px -2px gray,
+                -3px -3px 3px -1px gray;
+        }
+
+        .buy-btn-rana {
+            padding: .5vw;
+            color: blue;
+            bottom: 23px;
+            right: 10px;
+            border-radius: 7px;
+            box-shadow: 2px 2px 2px -1px gray,
+                -2px -2px 2px -1px gray;
+        }
+
+        .buy-btn-rana:hover {
+            background-color: rgb(210, 255, 158);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flex-column container-rana-main">
+        <div class="flex-row-wrap flex-center container-header">
+            <div class="header-item header-item1">Wallet : <span>$34</span></div>
+            <div class="header-item header-item2">Reload $30</div>
+            <div class="header-item header-item3">Real Money</div>
+        </div>
+        <div class="flex-row-wrap container-content flex-center">
+            <div class="opportunity-item-rana flex-around flex-column">
+                <div> Opportunity A</div>
+                <div style="background-color:white;width:100%" class="flex-row flex-around">
+                    <i style="font-size: 85px" class="fa fa-money" aria-hidden="true"></i> <span>0:30s</span>
+                </div>
+            </div>
+            <div class="opportunity-item-rana flex-around flex-column">
+                <div> Opportunity B</div>
+                <div style="background-color:white;width:100%" class="flex-row flex-around">
+                    <i style="font-size: 85px" class="fa fa-money" aria-hidden="true"></i> <span>0:15s</span>
+                </div>
+            </div>
+            <div class="opportunity-item-rana flex-column flex-around">
+                <div> Opportunity C</div>
+                <div style="background-color:white;width:100%" class="flex-row flex-around">
+                    <i style="font-size: 85px" class="fa fa-money" aria-hidden="true"></i> <span>1:00s</span>
+                </div>
+            </div>
+            <div id="item-highrisk" class="opportunity-item-rana item-highrisk flex-around flex-column">
+                <div> Cost 2$</div>
+                <div> Payout: 2$</div>
+                <div> High risk <button class="buy-btn-rana" onclick="buyClick()">BUY</button></div>
+
+            </div>
+            <div class="opportunity-item-rana flex-around flex-column">
+                <div> Cannot buy</div>
+                <div> Reload wallet</div>
+            </div>
+            <div class="opportunity-item-rana flex-column flex-around">
+                <!-- EMPTY -->
+            </div>
+            <div class="opportunity-item-rana flex-around flex-column">
+                <div>Working</div>
+                <div> <i id="loader-spin" style="font-size:65px" class="fas fa-sync "></i></div>
+            </div>
+            <div class="opportunity-item-rana flex-around flex-column">
+                <div>No payout</div>
+                <div> Try again</div>
+            </div>
+            <div id="payout-rana" class="opportunity-item-rana flex-column flex-around">
+
+            </div>
+
+        </div>
+    </div>
+    <script>
+        scaleHighrisk();
+        function scaleHighrisk() {
+            setTimeout(() => {
+                document.getElementById("item-highrisk").style.transform = "scale(1)"
+
+            }, 100)
+        }
+        function buyClick() {
+            document.getElementById("loader-spin").classList.add("fa-spin")
+            setTimeout(() => {
+                document.getElementById("loader-spin").classList.remove("fa-spin");
+                document.getElementById("payout-rana").innerHTML = "<div>$20 Payout</div><div><i class='fas fa-award' style='font-size:85px;color:gold'></i></div>"
+                blink()
+            }, 1500)
+        }
+
+        function blink() {
+            var i = 0;
+            const blinkInt = setInterval(() => {
+                document.getElementById("payout-rana").style.opacity = 0;
+                setTimeout(() => {
+                    document.getElementById("payout-rana").style.opacity = 1;
+                }, 200)
+
+                console.log(i)
+                if (i > 4) {
+                    clearInterval(blinkInt)
+                }
+                i++;
+
+
+
+            }, 500)
+
+        }
+
+    </script>
+</body>
+
+</html>
