@@ -1,14 +1,36 @@
-import React, { useState, useEffect } from 'react'
+import React, { Component } from 'react';
 
-export default function Loader () {
-  const [post, getPost] = useState([])
 
-  // const loadUrl = 'https://jsonplaceholder.typicode.com/posts';
-  const loadUrl = 'http://localhost:8080/oppo';
+
+
+interface IProps {
+}
+
+interface TypedOppo {
+  id: number
+  cost: number
+  payout: number
+}
+
+interface TypedState {
+  oppos : TypedOppo[]
+}
+
+
+
+const loadUrl = 'http://localhost:8080/oppo';
+
+class Loader extends Component<IProps, TypedState> {
   
-  const fetchPost = () => {
+  constructor(props : IProps) {
+    super(props);
+
+    this.state = { oppos: [] };
+  }
+
+  componentDidMount() {
     fetch(loadUrl, {
-      crossDomain:true,
+      // crossDomain:true,
       method: 'GET',
       /*
       method: 'POST',
@@ -20,22 +42,29 @@ export default function Loader () {
       */
     })
       .then((res) => res.json())
-      .then((res) => {
-        console.log(res)
-        getPost(res)
-      })
+      .then(data => this.setState({ oppos : data}));
   }
-  useEffect(() => {
-    fetchPost()
-  }, [])
-  return (
-    <>
+
+  render() {
+    const oppos = this.state.oppos;
+    console.log(oppos);
+    console.log(oppos[0]);
+
+    return (
+      <>
       <h2>React Fetch Data with REST API Example</h2>
       <ul>
-        {post.map((item, i) => {
-          return <li key={i}>{item.id}</li>
+        
+        {oppos.map((item, i) => {
+          return <li key={i}>{item.id} {item.cost} {item.payout} timeleft/duration </li>
         })}
       </ul>
     </>
-  )
+    );
+  }
+
+
+
 }
+
+export default Loader;

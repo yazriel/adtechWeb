@@ -11,10 +11,20 @@ import Container from '@mui/material/Container';
 
 import React, { useState, useEffect } from 'react'
 
-export default function Loader2 () {
-  const [oppos, getOppos] = useState([])
+// export
+interface TypedOppo {
+  id: number
+  cost: number
+  payout: number
+}
 
-  const urlOppo = 'http://localhost:8080/oppo';
+
+export default function Loader2 () {
+//  const [oppos, getOppos] = useState([])
+
+const [oppos, getOppos] = useState<TypedOppo[]>([])
+
+const urlOppo = 'http://localhost:8080/oppo';
   
   useEffect(() => {
     fetch(urlOppo, {
@@ -22,7 +32,7 @@ export default function Loader2 () {
       method: 'GET',
     }).then((res) => res.json())
       .then((res) => {
-        getOppos(res)
+        getOppos(res);
       })
   }, [])
   return (
@@ -99,7 +109,7 @@ export default function Loader2 () {
             <CardActions>
               <Button
                 fullWidth
-                variant="{oppo.buttonVariant as 'outlined' | 'contained'}"
+                variant="contained"
               >
                 "oppo.buttonText"
               </Button>
